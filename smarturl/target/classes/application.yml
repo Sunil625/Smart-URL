@@ -1,0 +1,64 @@
+spring:
+  application:
+    name: SmartURL
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/smarturl?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: smarturl_user
+    password: smarturl_pass
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 10
+          min-idle: 2
+
+  cache:
+    type: redis
+
+server:
+  port: 8080
+  compression:
+    enabled: true
+
+app:
+  base-url: http://localhost:8080
+  jwt:
+    # Generate your own: openssl rand -base64 64
+    secret: dGhpcyBpcyBhIHZlcnkgc2VjdXJlIHNlY3JldCBrZXkgZm9yIHNtYXJ0dXJsIGFwcGxpY2F0aW9u
+    expiration-ms: 86400000  # 24 hours
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    try-it-out-enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.smarturl: DEBUG
+    org.springframework.cache: DEBUG
